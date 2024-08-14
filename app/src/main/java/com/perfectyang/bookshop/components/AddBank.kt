@@ -208,10 +208,10 @@ fun AddBank(modifier: Modifier = Modifier, navController: NavController) {
                 onClick = {
                     coroutineScope.launch {
                         val userId = userViewModel.getUserData().firstOrNull()
-                        uiState = userId.let {
-                            uiState.copy(
+                         userId?.let {
+                             uiState = uiState.copy(
                                 category = bankType,
-                                user_id = it  ?: 0
+                                user_id = it.toInt()
                             )
                         }
                         if (bankType == "2") {

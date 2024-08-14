@@ -146,7 +146,7 @@ fun CardList(category: String, navController: NavController) {
                         }
                     }
                 }
-            }?: EmptyTip()
+            }
         }
     }
 }

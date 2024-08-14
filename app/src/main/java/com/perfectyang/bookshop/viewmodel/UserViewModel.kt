@@ -38,7 +38,7 @@ class UserViewModel(val repository: Repository, context: Context): ViewModel() {
     val userState: State<UserState> = _userState
 
 
-    val _userId = intPreferencesKey("user_id")
+    val _userId = stringPreferencesKey("user_id")
     val _username = stringPreferencesKey("user_name")
 
 
@@ -55,7 +55,7 @@ class UserViewModel(val repository: Repository, context: Context): ViewModel() {
     }
 
 
-    suspend fun saveUser(userId: Int, username: String) {
+    suspend fun saveUser(userId: String, username: String) {
         _context.dataStore.edit { user ->
             user[_userId] = userId
             user[_username] = username
@@ -66,11 +66,12 @@ class UserViewModel(val repository: Repository, context: Context): ViewModel() {
     suspend fun clear() {
         _context.dataStore.edit { user ->
             user[_username] = ""
+            user[_userId] = ""
         }
     }
 
-    fun getUserData (): Flow<Int> {
-        return _context.dataStore.data.map { it[_userId] ?: 0 }
+    fun getUserData (): Flow<String> {
+        return _context.dataStore.data.map { it[_userId] ?: "" }
     }
 
 
@@ -92,7 +93,7 @@ class UserViewModel(val repository: Repository, context: Context): ViewModel() {
         viewModelScope.launch {
             val userInfo: UserEntity =  repository.login(user)
             if (userInfo !== null && userInfo.userId.toString().isNotEmpty()) {
-                saveUser(userInfo.userId, userInfo.username)
+                saveUser(userInfo.userId.toString(), userInfo.username)
                 callback(true)
             } else {
                 callback(false)

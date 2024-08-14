@@ -36,9 +36,9 @@ class BankViewModel(val repository: Repository, category: String = "1", userView
     fun fetchBankList() {
         viewModelScope.launch {
             val userId = _userViewModel.getUserData().firstOrNull()
-            userId.let {
+            userId?.let {
                 Log.d("进来2", "$it --- $_c")
-                repository.getAllBanks(category = _c, userId = it ?: 0).collect { items ->
+                repository.getAllBanks(category = _c, userId = it.toInt()).collect { items ->
                     _bankList.value = items
                 }
             }
@@ -48,8 +48,8 @@ class BankViewModel(val repository: Repository, category: String = "1", userView
     fun _search(title: String) {
         viewModelScope.launch {
             val userId = _userViewModel.getUserData().firstOrNull()
-            userId.let {
-                repository.searchBank(title, category = _c, userId = it ?: 0).collect { items ->
+            userId?.let {
+                repository.searchBank(title, category = _c, userId = it.toInt()).collect { items ->
                     // 将从 Room 获取的数据更新到 MutableState 中
                     _bankList.value = items
                 }

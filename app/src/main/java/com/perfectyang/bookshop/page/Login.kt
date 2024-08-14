@@ -134,7 +134,7 @@ fun Login(
        Button(
            modifier = Modifier
                .fillMaxWidth()
-               .padding(top = 30.dp),
+               .padding(top = 30.dp, start = 20.dp, end = 20.dp),
            onClick = {
                if (isRegister) {
                    viewModel.register(UserEntity(username = state.username, password = state.password), callback = {
